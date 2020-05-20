@@ -29,6 +29,7 @@ import styles from './Field.less'
 import {CustomizationContext} from '../../components/View/View'
 import {InteractiveInput} from '../../components/ui/InteractiveInput/InteractiveInput'
 import HistoryField from '../../components/ui/HistoryField/HistoryField'
+import {BcFilter} from '../../interfaces/filters'
 
 interface FieldOwnProps {
     widgetFieldMeta: WidgetField,
@@ -52,6 +53,7 @@ interface FieldProps extends FieldOwnProps {
     rowFieldMeta: RowMetaField,
     metaError: string,
     showErrorPopup: boolean,
+    bcFilter: BcFilter[],
     onChange: (payload: ChangeDataItemPayload) => void,
     onDrillDown: (widgetName: string, cursor: string, bcName: string, fieldKey: string) => void,
 }
@@ -148,6 +150,27 @@ export const Field: FunctionComponent<FieldProps> = (props) => {
         disabled,
         placeholder,
         readOnly: props.readonly,
+    }
+
+    const valueBlur = (fieldValue: string, subSt: string) => {
+        const substrArray = fieldValue?.length && subSt?.length && fieldValue.toLowerCase().split(subSt.toLowerCase()) || []
+
+        let firstSubstr = true
+        let position = 0
+        return <div>
+            {substrArray?.map(str => {
+                const subSubstr = firstSubstr ? '' : subSt
+                firstSubstr = false
+                const positionFrom = position
+                const positionTo = position + str.length
+                position = positionTo + subSt.length
+                return <span>
+                    <b>{fieldValue.slice(positionFrom - subSubstr.length,positionFrom)}</b>
+                    {fieldValue.slice(positionFrom, positionTo)}
+                </span>
+            })
+            }
+        </div>
     }
 
     Object.keys(commonProps).forEach(key => {
@@ -346,7 +369,15 @@ export const Field: FunctionComponent<FieldProps> = (props) => {
                 ? <ReadOnlyField
                     {...commonProps}
                 >
-                    {value}
+                    { // Find existing filters for this field and bold part input readonly value if is filtered
+                        typeof value === 'string' && props?.bcFilter
+                        ?.filter(filterItem => filterItem?.fieldName === commonProps?.meta?.key)[0]
+                        ?.value?.toString().length > 0
+                        ? valueBlur(
+                            value,
+                            props?.bcFilter?.filter(filterItem => filterItem?.fieldName === commonProps?.meta?.key)[0]?.value as string
+                            )
+                        : value}
                 </ReadOnlyField>
                 : <InteractiveInput
                     suffixClassName={props.suffixClassName}
@@ -404,12 +435,14 @@ function mapStateToProps(store: Store, ownProps: FieldOwnProps) {
     ?.[ownProps.widgetFieldMeta.key]
     const widget = store.view.widgets.find(item => item.name === ownProps.widgetName)
     const showErrorPopup = widget?.type !== WidgetTypes.Form
+    const bcFilter = store.screen.filters[ownProps.bcName]
     return {
         data: ownProps.data || store.data[ownProps.bcName]?.find(item => item.id === ownProps.cursor),
         pendingValue,
         rowFieldMeta,
         metaError,
-        showErrorPopup
+        showErrorPopup,
+        bcFilter
     }
 }
 
