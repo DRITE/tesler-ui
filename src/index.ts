@@ -53,4 +53,3 @@ export {
     isWidgetFieldBlock,
     TableLikeWidgetTypes
 }
-
