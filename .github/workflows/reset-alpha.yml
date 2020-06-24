@@ -1,0 +1,23 @@
+name: reset-alpha
+
+on:
+  push:
+    branches: 
+      - develop
+
+jobs:
+  reset-alpha:
+     runs-on: ubuntu-latest
+     steps:
+     - name: Clone repo
+       uses: actions/checkout@v1
+   
+     - name: Reset alpha to develop
+       run: |
+          git config --global user.name "drite"
+          git config --global user.email "gubarevfyodor@gmail.com"
+          git checkout alpha
+          git remote -v
+#          git reset --hard develop
+#          git push origin alpha -f
+          
