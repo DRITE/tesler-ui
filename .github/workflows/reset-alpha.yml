@@ -17,7 +17,7 @@ jobs:
           git config --global user.name "drite"
           git config --global user.email "gubarevfyodor@gmail.com"
           git checkout alpha
-          git remote -v
-#          git reset --hard develop
-#          git push origin alpha -f
+#          git remote -v
+          git reset --hard develop
+          git push origin alpha -f
           
