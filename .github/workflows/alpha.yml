@@ -26,7 +26,9 @@ jobs:
         uses: nyaascii/package-version@v1
 
       - name: Show env
-        run: echo "my version ${{ env.PACKAGE_VERSION }}"
+        run: |
+        echo "my version ${{ env.PACKAGE_VERSION }}"
+        echo "show env ${{ env }}"
 
       - name: Bump alpha version
         id: bump_version
