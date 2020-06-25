@@ -10,8 +10,10 @@ jobs:
     name: Create NPM Release
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v1
         with:
           node-version: '10.x'
           always-auth: true
@@ -19,7 +21,7 @@ jobs:
         run: |
           git config --global user.name "drite"
           git config --global user.email "gubarevfyodor@gmail.com"
-          yarn version --prepatch --preid=alpha
+          yarn version --preid=alpha
       - name: install
         run: yarn install
       - name: linter
