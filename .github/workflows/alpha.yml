@@ -12,27 +12,44 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
+
       - name: Setup node
         uses: actions/setup-node@v1
         with:
           node-version: '10.x'
           always-auth: true
-      - name: Increase version
-        run: |
-          git config --global user.name "drite"
-          git config --global user.email "gubarevfyodor@gmail.com"
-          yarn version --preid=alpha
-      - name: install
-        run: yarn install
-      - name: linter
-        run: yarn lint
-      - name: build
-        run: yarn build
-      - name: Publish dist to NPM
-        run: |
-          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
-          cd dist
-          yarn publish --tag alpha --access public
-          cd ..
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: List current directory
+        run : ls -la
+
+      - name: Get package version
+        uses: nyaascii/package-version@v1
+        with:
+          path: './package.json' # Optional
+          follow-symlinks: 'false' # Optional
+
+      - name: Show env
+        run: echo "my version ${{ env.PACKAGE_VERSION }}"
+
+      #- name: Get actual versions from npm
+      #  id: get-versions
+      #  run: yarn info
+      #- name: Increase version
+      #  run: |
+      #    git config --global user.name "drite"
+      #    git config --global user.email "gubarevfyodor@gmail.com"
+      #    yarn version --preid=alpha
+      #- name: install
+      #  run: yarn install
+      #- name: linter
+      #  run: yarn lint
+      #- name: build
+      #  run: yarn build
+      #- name: Publish dist to NPM
+      #  run: |
+      #    echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
+      #    cd dist
+      #    yarn publish --tag alpha --access public
+      #    cd ..
+      #  env:
+      #    NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
