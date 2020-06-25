@@ -30,6 +30,15 @@ jobs:
           echo "Package version ${{ env.PACKAGE_VERSION }}"
 
       - name: Grep version fron NPM registry
+        id: grep_version
         run: |
           yarn info @drite/tesler-ui-core 'dist-tags' | grep -Eo "${{ env.PACKAGE_VERSION }}(-alpha[0-9]{1,})?" | sort -r | head -1
 
+      - name: Check grep
+        run: echo "Grepped.. ${{ steps.grep_version.outputs }}"
+      #- name: Bump release version
+      #  id: bump_version
+      #  uses: christian-draeger/increment-semantic-version@1.0.1
+      #  with:
+      #    current-version: '${{ steps.grep_version.outputs }}'
+      #    version-fragment: 'alpha'
