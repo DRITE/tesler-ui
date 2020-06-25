@@ -32,7 +32,7 @@ jobs:
       - name: Grep version fron NPM registry
         id: grep_version
         run: |
-          ::set-output name={next_ver}::{{ yarn info @drite/tesler-ui-core 'dist-tags' | grep -Eo "${{ env.PACKAGE_VERSION }}(-alpha[0-9]{1,})?" | sort -r | head -1 }}
+          ::set-output name={next_ver}::{{ yarn info @drite/tesler-ui-core 'dist-tags' | grep -Eo "${{ env.PACKAGE_VERSION }}(-alpha[0-9]{1,})?" | sort -r | head -1 |  | xargs echo }}
 
       - name: Check grep
         run: echo "Grepped.. ${{ steps.grep_version.outputs.next_ver }}"
