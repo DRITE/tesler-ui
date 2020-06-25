@@ -24,9 +24,6 @@ jobs:
 
       - name: Get package version
         uses: nyaascii/package-version@v1
-        with:
-          path: './package.json' # Optional
-          follow-symlinks: 'false' # Optional
 
       - name: Show env
         run: echo "my version ${{ env.PACKAGE_VERSION }}"
