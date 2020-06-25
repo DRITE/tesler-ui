@@ -28,6 +28,15 @@ jobs:
       - name: Show env
         run: echo "my version ${{ env.PACKAGE_VERSION }}"
 
+      - name: Bump alpha version
+        id: bump_version
+        uses: christian-draeger/increment-semantic-version@1.0.1
+        with:
+          current-version: '${{ env.PACKAGE_VERSION }}'
+          version-fragment: 'alpha'
+      - name: Do something with your bumped release version
+        run: echo ${{ steps.bump_version.outputs.next-version }}
+
       #- name: Get actual versions from npm
       #  id: get-versions
       #  run: yarn info
