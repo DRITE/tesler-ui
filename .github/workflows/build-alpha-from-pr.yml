@@ -8,32 +8,14 @@ on:
   issue_comment:
     types: [created]
 
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  check-commentator:
-    name: Check if commentator is a member of tesler-team
-    runs-on: ubuntu-latest
-    env:
-      TOKEN: ${{ secrets.READ_MEMBERS_TOKEN }}
-    outputs:
-      output1: ${{ steps.step1.outputs.member_check }}
-    steps:
-      - name: test curl
-        run: |
-          curl --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' --url https://api.github.com/orgs/tesler-platform/teams/tesler-team/members
-      - name: Grep commentator
-        id: step1
-        run: |
-          result=`curl --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' --url https://api.github.com/orgs/tesler-platform/teams/tesler-team/members | grep -Eo "(\"login\": \"${{ github.event.comment.user.login }}\")" | wc -l`;
-          echo "number of entries: $result";
-          echo "##[set-output name=member_check;]$result"
-
+  # This workflow contains a single job called "build"
   build-alpha:
     name: Build alpha package
-    needs: check-commentator
-    env:
-      TOKEN: ${{ secrets.READ_MEMBERS_TOKEN }}
-    if: github.event.issue.pull_request != '' && contains(github.event.comment.body, '/alpha') && needs.check-commentator.outputs.output1 > 0
+    if: github.event.issue.pull_request != '' && contains(github.event.comment.body, '/alpha')
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
@@ -48,7 +30,7 @@ jobs:
       - name: Grep version fron NPM registry
         id: grep_version
         run: |
-          echo "##[set-output name=current_version;]$(yarn info @drite/tesler-ui-core versions | grep -Eo "${{ env.PACKAGE_VERSION }}(-alpha[0-9]{1,})?" | sort -r | head -1 | xargs echo)"
+          echo "##[set-output name=current_version;]$(yarn info @tesler-ui/core versions | grep -Eo "${{ env.PACKAGE_VERSION }}(-alpha[0-9]{1,})?" | sort -r | head -1 | xargs echo)"
 
       - name: Bump release version
         id: bump_version
@@ -62,8 +44,8 @@ jobs:
 
       - name: Increase version
         run: |
-          git config --global user.name "drite"
-          git config --global user.email "gubarevfyodor@gmail.com"
+          git config --global user.name "github"
+          git config --global user.email "dergachev@hotmail.com"
           yarn version --new-version ${{ steps.bump_version.outputs.next-version }}
 
       - name: install
