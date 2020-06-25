@@ -31,6 +31,5 @@ jobs:
 
       - name: Grep version fron NPM registry
         run: |
-          yarn info @drite/tesler-ui-core 'dist-tags'
-          grep -Eo "${{ env.PACKAGE_VERSION }}"
+          yarn info @drite/tesler-ui-core 'dist-tags' | grep -Eo "${{ env.PACKAGE_VERSION }}"
 
