@@ -34,7 +34,7 @@ jobs:
 
       - name: Bump release version
         id: bump_version
-        uses: DRITE/increment-semantic-version@master
+        uses: DRITE/increment-semantic-version@fix/incrementation-preversion
         with:
           current-version: '${{ steps.grep_version.outputs.current_version }}'
           version-fragment: 'alpha'
