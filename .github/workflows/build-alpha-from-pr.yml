@@ -42,13 +42,13 @@ jobs:
           version-fragment: 'alpha'
 
       - name: Check bump
-        run: echo "bumped.. ${{ steps.grep_version.outputs.next_ver }}"
+        run: echo "bumped.. ${{ steps.bump_version.outputs.next-version }}"
 
       - name: Increase version
         run: |
           git config --global user.name "drite"
           git config --global user.email "gubarevfyodor@gmail.com"
-          yarn version --new-version ${{ steps.grep_version.outputs.next_ver }}
+          yarn version --new-version ${{ steps.bump_version.outputs.next-version }}
 
         # Check increased version
       - name: Check increased version
