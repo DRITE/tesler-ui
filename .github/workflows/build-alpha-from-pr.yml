@@ -16,95 +16,53 @@ jobs:
     if: github.event.issue.pull_request != '' && contains(github.event.comment.body, '/alpha')
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Get package version
+        uses: nyaascii/package-version@v1
+
+      - name: Show env
+        run: |
+          echo "Package version ${{ env.PACKAGE_VERSION }}"
+
+      - name: Grep version fron NPM registry
+        id: grep_version
+        run: |
+          echo "##[set-output name=current_version;]$(yarn info @drite/tesler-ui-core versions | grep -Eo "${{ env.PACKAGE_VERSION }}(-alpha[0-9]{1,})?" | sort -r | head -1 | xargs echo)"
+
       - name: Bump release version
-        id: bump_version1
+        id: bump_version
         uses: christian-draeger/increment-semantic-version@1.0.1
         with:
-          current-version: '1.15.2-alpha1'
+          current-version: '${{ steps.grep_version.outputs.current_version }}'
           version-fragment: 'alpha'
 
       - name: Check bump
-        run: echo "bumped.. ${{ steps.bump_version1.outputs.next-version }}"
+        run: echo "bumped.. ${{ steps.bump_version.outputs.next-version }}"
 
-      - name: Bump release version
-        id: bump_version2
-        uses: christian-draeger/increment-semantic-version@1.0.1
-        with:
-          current-version: '1.15.2-alpha4'
-          version-fragment: 'alpha'
+      - name: Increase version
+        run: |
+          git config --global user.name "drite"
+          git config --global user.email "gubarevfyodor@gmail.com"
+          yarn version --new-version ${{ steps.bump_version.outputs.next-version }}
 
-      - name: Check bump
-        run: echo "bumped.. ${{ steps.bump_version2.outputs.next-version }}"
+      - name: install
+        run: yarn install
 
-      - name: Bump release version
-        id: bump_version3
-        uses: christian-draeger/increment-semantic-version@1.0.1
-        with:
-          current-version: '1.15.3'
-          version-fragment: 'alpha'
+      - name: linter
+        run: yarn lint
 
-      - name: Check bump
-        run: echo "bumped.. ${{ steps.bump_version3.outputs.next-version }}"
+      - name: build
+        run: yarn build
 
-      - name: Bump release version
-        id: bump_version4
-        uses: christian-draeger/increment-semantic-version@1.0.1
-        with:
-          current-version: '1.15.2-alpha4'
-          version-fragment: 'bug'
-
-      - name: Check bump
-        run: echo "bumped.. ${{ steps.bump_version4.outputs.next-version }}"
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-#      - name: Checkout repo
-#        uses: actions/checkout@v2
-#
-#      - name: Get package version
-#        uses: nyaascii/package-version@v1
-#
-#      - name: Show env
-#        run: |
-#          echo "Package version ${{ env.PACKAGE_VERSION }}"
-#
-#      - name: Grep version fron NPM registry
-#        id: grep_version
-#        run: |
-#          yarn info @drite/tesler-ui-core versions | grep -Eo "${{ env.PACKAGE_VERSION }}(-alpha[0-9]{1,})?" | sort -r | head -1 | xargs echo
-#          echo "##[set-output name=current_version;]$(yarn info @drite/tesler-ui-core versions | grep -Eo "${{ env.PACKAGE_VERSION }}(-alpha[0-9]{1,})?" | sort -r | head -1 | xargs echo)"
-#
-#      - name: Bump release version
-#        id: bump_version
-#        uses: christian-draeger/increment-semantic-version@1.0.1
-#        with:
-#          current-version: '${{ steps.grep_version.outputs.current_version }}'
-#          version-fragment: 'alpha'
-#
-#      - name: Check bump
-#        run: echo "bumped.. ${{ steps.bump_version.outputs.next-version }}"
-#
-#      - name: Increase version
-#        run: |
-#          git config --global user.name "drite"
-#          git config --global user.email "gubarevfyodor@gmail.com"
-#          yarn version --new-version ${{ steps.bump_version.outputs.next-version }}
-#
-#      - name: install
-#        run: yarn install
-#
-#      - name: linter
-#        run: yarn lint
-#
-#      - name: build
-#        run: yarn build
-#
-#      - name: Publish dist to NPM
-#        run: |
-#          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
-#          cd dist
-#          yarn publish --tag alpha --access public
-#          cd ..
-#        env:
-#          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Publish dist to NPM
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
+          cd dist
+          yarn publish --tag alpha --access public
+          cd ..
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
