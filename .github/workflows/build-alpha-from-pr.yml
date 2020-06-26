@@ -34,11 +34,44 @@ jobs:
         run: |
           echo "##[set-output name=next_ver;]$(yarn info @drite/tesler-ui-core 'dist-tags' | grep -Eo "${{ env.PACKAGE_VERSION }}(-alpha[0-9]{1,})?" | sort -r | head -1 | xargs echo)"
 
-      - name: Check grep
-        run: echo "Grepped.. ${{ steps.grep_version.outputs.next_ver }}"
-      #- name: Bump release version
-      #  id: bump_version
-      #  uses: christian-draeger/increment-semantic-version@1.0.1
-      #  with:
-      #    current-version: '${{ steps.grep_version.outputs }}'
-      #    version-fragment: 'alpha'
+      - name: Bump release version
+        id: bump_version
+        uses: christian-draeger/increment-semantic-version@1.0.1
+        with:
+          current-version: '${{ steps.grep_version.outputs.next_ver }}'
+          version-fragment: 'alpha'
+
+      - name: Check bump
+        run: echo "bumped.. ${{ steps.grep_version.outputs.next_ver }}"
+
+      - name: Increase version
+        run: |
+          git config --global user.name "drite"
+          git config --global user.email "gubarevfyodor@gmail.com"
+          yarn version --new-version ${{ steps.grep_version.outputs.next_ver }}
+
+        # Check increased version
+      - name: Check increased version
+        uses: nyaascii/package-version@v1
+      - name: Show env.PACKAGE_VERSION
+        run: |
+          echo "Package version ${{ env.PACKAGE_VERSION }}"
+
+      #- name: install
+      #  run: yarn install
+
+      #- name: linter
+      #  run: yarn lint
+
+      #- name: build
+      #  run: yarn build
+
+      #- name: Publish dist to NPM
+      #  run: |
+      #    echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
+      #    cd dist
+      #    yarn publish --tag alpha --access public
+      #    cd ..
+      #  env:
+      #    NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
