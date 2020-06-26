@@ -32,13 +32,14 @@ jobs:
       - name: Grep version fron NPM registry
         id: grep_version
         run: |
-          echo "##[set-output name=next_ver;]$(yarn info @drite/tesler-ui-core 'dist-tags' | grep -Eo "${{ env.PACKAGE_VERSION }}(-alpha[0-9]{1,})?" | sort -r | head -1 | xargs echo)"
+          yarn info @drite/tesler-ui-core versions | grep -Eo "${{ env.PACKAGE_VERSION }}(-alpha[0-9]{1,})?" | sort -r | head -1 | xargs echo
+          echo "##[set-output name=current_version;]$(yarn info @drite/tesler-ui-core versions | grep -Eo "${{ env.PACKAGE_VERSION }}(-alpha[0-9]{1,})?" | sort -r | head -1 | xargs echo)"
 
       - name: Bump release version
         id: bump_version
         uses: christian-draeger/increment-semantic-version@1.0.1
         with:
-          current-version: '${{ steps.grep_version.outputs.next_ver }}'
+          current-version: '${{ steps.grep_version.outputs.current_version }}'
           version-fragment: 'alpha'
 
       - name: Check bump
@@ -63,7 +64,7 @@ jobs:
         run: |
           echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
           cd dist
-          yarn publish --verbose --tag alpha --access public
+          yarn publish --tag alpha --access public
           cd ..
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
