@@ -50,28 +50,21 @@ jobs:
           git config --global user.email "gubarevfyodor@gmail.com"
           yarn version --new-version ${{ steps.bump_version.outputs.next-version }}
 
-        # Check increased version
-      - name: Check increased version
-        uses: nyaascii/package-version@v1
-      - name: Show env.PACKAGE_VERSION
+      - name: install
+        run: yarn install
+
+      - name: linter
+        run: yarn lint
+
+      - name: build
+        run: yarn build
+
+      - name: Publish dist to NPM
         run: |
-          echo "Package version ${{ env.PACKAGE_VERSION }}"
-
-      #- name: install
-      #  run: yarn install
-
-      #- name: linter
-      #  run: yarn lint
-
-      #- name: build
-      #  run: yarn build
-
-      #- name: Publish dist to NPM
-      #  run: |
-      #    echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
-      #    cd dist
-      #    yarn publish --tag alpha --access public
-      #    cd ..
-      #  env:
-      #    NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
+          cd dist
+          yarn publish --tag alpha --access public
+          cd ..
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
