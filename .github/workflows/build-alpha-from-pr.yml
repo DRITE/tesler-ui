@@ -20,12 +20,8 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v2
 
-      - name: Get comment
-        run: echo "${{ github.event.comment }}"
-
       - name: Get commentator
-        run: echo "${{ github.event.comment.author }}"
-
+        run: echo "${{ github.event.comment.author.login }}"
 
 #      - name: Get package version
 #        uses: nyaascii/package-version@v1
