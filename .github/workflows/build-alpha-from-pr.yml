@@ -11,18 +11,24 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   build-alpha:
-    name: Build alpha package
+    name: Check if commentator is a member of tesler-team
     runs-on: ubuntu-latest
     env:
       TOKEN: ${{ secrets.READ_MEMBERS_TOKEN }}
-    if: curl -u drite:$TOKEN https://api.github.com/orgs/tesler-platform/teams/tesler-team/members | grep -Eo "${{ github.event.comment.user.login }}" | wc -c > 0
-
+#    if: curl -u drite:$TOKEN https://api.github.com/orgs/tesler-platform/teams/tesler-team/members | grep -Eo "${{ github.event.comment.user.login }}" | wc -c > 0
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
 
-      - name: Get commentator
-        run: echo "it is a member!"
+      - name: Grep commentator
+        run: |
+          var result = curl -u drite:$TOKEN https://api.github.com/orgs/tesler-platform/teams/tesler-team/members | grep -Eo "${{ github.event.comment.user.login }}" | wc -c
+          echo $result
+          if [ $result > 0 ];
+          then echo "it is member"
+          else echo "not member"
+          fi
+
 #  check-commentator:
 #    name: Check if commentator is a member of tesler-team
 #    runs-on: ubuntu-latest
