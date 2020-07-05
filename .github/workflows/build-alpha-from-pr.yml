@@ -22,18 +22,8 @@ jobs:
 
       - name: Get comment
         run: echo "${{ toJson(github.event.comment) }}"
-
-      - name: Get editor
-        run: echo "${{ github.event.comment.editor.login }}"
       - name: Get commentator
-        run: echo "${{ github.event.comment.author.login }}"
-
-      - name: Get comment
-        run: echo "${{ github.event.comment.body }}"
-      - name: Get publishedAt
-        run: echo "${{ github.event.comment.publishedAt }}"
-      - name: Get viewerDidAuthor
-        run: echo "${{ github.event.comment.viewerDidAuthor }}"
+        run: echo "${{ github.event.comment.user.login }}"
 
 #      - name: Get package version
 #        uses: nyaascii/package-version@v1
