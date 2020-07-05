@@ -10,7 +10,14 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
+  check-commentator:
+    name: Check if commentator is a member of tesler-team
+    runs-on: ubuntu-latest
+    if: curl -u drite:${{ secrets.READ_MEMBERS_TOKEN }} https://api.github.com/orgs/tesler-platform/teams/tesler-team/members | grep -Eo "${{ github.event.comment.user.login }}" | wc -c > 0
+    steps:
+      - name: Get commentator
+        run: echo "it is a member!"
+
   build-alpha:
     name: Build alpha package
     if: github.event.issue.pull_request != '' && contains(github.event.comment.body, '/alpha')
@@ -19,11 +26,6 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
-
-      - name: Get comment
-        run: echo "${{ toJson(github.event.comment) }}"
-      - name: Get commentator
-        run: echo "${{ github.event.comment.user.login }}"
 
 #      - name: Get package version
 #        uses: nyaascii/package-version@v1
