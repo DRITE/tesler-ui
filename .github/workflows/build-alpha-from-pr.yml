@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TOKEN: ${{ secrets.READ_MEMBERS_TOKEN }}
-    if: github.event.issue.pull_request != '' && contains(github.event.comment.body, '/alpha')
+    if: curl -u drite:$TOKEN https://api.github.com/orgs/tesler-platform/teams/tesler-team/members | grep -Eo "${{ github.event.comment.user.login }}" | wc -c > 0
 
     steps:
       - name: Checkout repo
