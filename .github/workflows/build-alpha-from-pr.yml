@@ -21,7 +21,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Get comment
-          run: echo "(github.event.comment)"
+        run: echo "(github.event.comment)"
 
       - name: Get commentator
         run: echo "(github.event.comment.author)"
