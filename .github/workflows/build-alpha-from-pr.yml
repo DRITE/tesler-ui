@@ -10,24 +10,28 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  check-commentator:
-    name: Check if commentator is a member of tesler-team
-    runs-on: ubuntu-latest
-    env:
-      TOKEN: ${{ secrets.READ_MEMBERS_TOKEN }}
-    if: curl -u drite:$TOKEN https://api.github.com/orgs/tesler-platform/teams/tesler-team/members | grep -Eo "${{ github.event.comment.user.login }}" | wc -c > 0
-    steps:
-      - name: Get commentator
-        run: echo "it is a member!"
-
+#  check-commentator:
+#    name: Check if commentator is a member of tesler-team
+#    runs-on: ubuntu-latest
+#    env:
+#      TOKEN: ${{ secrets.READ_MEMBERS_TOKEN }}
+#    if: curl -u drite:$TOKEN https://api.github.com/orgs/tesler-platform/teams/tesler-team/members | grep -Eo "${{ github.event.comment.user.login }}" | wc -c > 0
+#    steps:
+#      - name: Get commentator
+#        run: echo "it is a member!"
   build-alpha:
     name: Build alpha package
-    if: github.event.issue.pull_request != '' && contains(github.event.comment.body, '/alpha')
+    env:
+      TOKEN: ${{ secrets.READ_MEMBERS_TOKEN }}
+    if: github.event.issue.pull_request != '' && contains(github.event.comment.body, '/alpha') && (curl -u drite:$TOKEN https://api.github.com/orgs/tesler-platform/teams/tesler-team/members | grep -Eo "${{ github.event.comment.user.login }}" | wc -c > 0)
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
+
+      - name: Get commentator
+        run: echo "it is a member!"
 
 #      - name: Get package version
 #        uses: nyaascii/package-version@v1
