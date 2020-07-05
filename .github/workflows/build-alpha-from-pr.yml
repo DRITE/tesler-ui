@@ -23,6 +23,9 @@ jobs:
       - name: Get commentator
         run: echo "${{ github.event.comment.author.login }}"
 
+      - name: Get comment
+        run: echo "${{ github.event.comment.body }}"
+
 #      - name: Get package version
 #        uses: nyaascii/package-version@v1
 #
