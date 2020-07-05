@@ -22,7 +22,11 @@ jobs:
 
       - name: Grep commentator
         run: |
-          var result = curl -u drite:$TOKEN https://api.github.com/orgs/tesler-platform/teams/tesler-team/members | grep -Eo "${{ github.event.comment.user.login }}" | wc -c
+          var members = curl -u drite:$TOKEN https://api.github.com/orgs/tesler-platform/teams/tesler-team/members
+          echo $members
+          var grepped = $members | grep -Eo "${{ github.event.comment.user.login }}"
+          echo "grepped $grepped"
+          var result =  $grepped | wc -c
           echo $result
           if [ $result > 0 ];
           then echo "it is member"
