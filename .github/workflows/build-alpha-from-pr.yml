@@ -12,6 +12,7 @@ on:
 jobs:
   build-alpha:
     name: Build alpha package
+    runs-on: ubuntu-latest
     env:
       TOKEN: ${{ secrets.READ_MEMBERS_TOKEN }}
     if: github.event.issue.pull_request != '' && contains(github.event.comment.body, '/alpha')
