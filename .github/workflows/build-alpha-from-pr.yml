@@ -13,7 +13,9 @@ jobs:
   check-commentator:
     name: Check if commentator is a member of tesler-team
     runs-on: ubuntu-latest
-    if: curl -u drite:${{ secrets.READ_MEMBERS_TOKEN }} https://api.github.com/orgs/tesler-platform/teams/tesler-team/members | grep -Eo "${{ github.event.comment.user.login }}" | wc -c > 0
+    env:
+      TOKEN: ${{ secrets.READ_MEMBERS_TOKEN }}
+    if: curl -u drite:$TOKEN https://api.github.com/orgs/tesler-platform/teams/tesler-team/members | grep -Eo "${{ github.event.comment.user.login }}" | wc -c > 0
     steps:
       - name: Get commentator
         run: echo "it is a member!"
