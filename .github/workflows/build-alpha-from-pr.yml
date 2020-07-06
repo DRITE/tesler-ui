@@ -39,9 +39,9 @@ jobs:
         run: echo "${{ github.event.issue.pull_request != '' }}"
       - name: contains(github.event.comment.body, '/alpha')
         run: echo "${{ contains(github.event.comment.body, '/alpha') }}"
-      - name: jobs.check-commentator.outputs.member_check == 1
+      - name: check output
         run: echo "${{ jobs.check-commentator.outputs.member_check == 1 }}"
-      - name: jobs.check-commentator.outputs.member_check
+      - name: what was output
         run: echo "${{ jobs.check-commentator.outputs.member_check }}"
 
 #  build-alpha:
