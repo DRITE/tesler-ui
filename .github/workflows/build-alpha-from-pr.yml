@@ -10,24 +10,24 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  check-commentator:
-    name: Check if commentator is a member of tesler-team
-    runs-on: ubuntu-latest
-    env:
-      TOKEN: ${{ secrets.READ_MEMBERS_TOKEN }}
-    steps:
-      - name: Grep commentator
-        run: |
-          result=`curl -u drite:$TOKEN https://api.github.com/orgs/tesler-platform/teams/tesler-team/members | grep -Eo "${{ github.event.comment.user.login }}" | wc -l`;
-          echo "number of entries: $result";
-          echo "##[set-output name=member_check;]$(curl -u drite:$TOKEN https://api.github.com/orgs/tesler-platform/teams/tesler-team/members | grep -Eo "${{ github.event.comment.user.login }}" | wc -l)"
+#  check-commentator:
+#    name: Check if commentator is a member of tesler-team
+#    runs-on: ubuntu-latest
+#    env:
+#      TOKEN: ${{ secrets.READ_MEMBERS_TOKEN }}
+#    steps:
+#      - name: Grep commentator
+#        run: |
+#          result=`curl -u drite:$TOKEN https://api.github.com/orgs/tesler-platform/teams/tesler-team/members | grep -Eo "${{ github.event.comment.user.login }}" | wc -l`;
+#          echo "number of entries: $result";
+#          echo "##[set-output name=member_check;]$(curl -u drite:$TOKEN https://api.github.com/orgs/tesler-platform/teams/tesler-team/members | grep -Eo "${{ github.event.comment.user.login }}" | wc -l)"
 
   build-alpha:
     name: Build alpha package
-    needs: check-commentator
+    #needs: check-commentator
     env:
       TOKEN: ${{ secrets.READ_MEMBERS_TOKEN }}
-#    if: ${{ github.event.issue.pull_request != '' && contains(github.event.comment.body, '/alpha') && needs.check-commentator.outputs.member_check == 1 }}
+    if: github.event.issue.pull_request != '' && contains(github.event.comment.body, '/alpha') && ${{ curl -u drite:$TOKEN https://api.github.com/orgs/tesler-platform/teams/tesler-team/members | grep -Eo "${{ github.event.comment.user.login }}" | wc -l > 0 }}
     runs-on: ubuntu-latest
 
     steps:
@@ -36,10 +36,10 @@ jobs:
         run: echo "${{ github.event.issue.pull_request != '' }}"
       - name: contains(github.event.comment.body, '/alpha')
         run: echo "${{ contains(github.event.comment.body, '/alpha') }}"
-      - name: check output
-        run: echo "${{ needs.check-commentator.outputs.member_check > 0 }}"
-      - name: what was output
-        run: echo "${{ needs.check-commentator.outputs.member_check }}"
+      - name: check commenator
+        run: echo "${{ curl -u drite:$TOKEN https://api.github.com/orgs/tesler-platform/teams/tesler-team/members | grep -Eo "${{ github.event.comment.user.login }}" | wc -l > 0 }}"
+#      - name: what was output
+#        run: echo "${{ needs.check-commentator.outputs.member_check }}"
 
 #  build-alpha:
 #    name: Build alpha package
