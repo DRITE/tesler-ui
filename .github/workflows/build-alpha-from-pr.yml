@@ -41,6 +41,8 @@ jobs:
         run: echo "${{ contains(github.event.comment.body, '/alpha') }}"
       - name: needs.check-commentator.outputs.member_check == 1
         run: echo "${{ needs.check-commentator.outputs.member_check == 1 }}"
+      - name: needs.check-commentator.outputs.member_check
+        run: echo "${{ needs.check-commentator.outputs.member_check }}"
 
 #  build-alpha:
 #    name: Build alpha package
