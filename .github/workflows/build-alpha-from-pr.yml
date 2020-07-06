@@ -49,18 +49,12 @@ jobs:
     needs: check-commentator
     env:
       TOKEN: ${{ secrets.READ_MEMBERS_TOKEN }}
-#    if: github.event.issue.pull_request != '' && contains(github.event.comment.body, '/alpha')
+    if: github.event.issue.pull_request != '' && contains(github.event.comment.body, '/alpha') && ${{ needs.check-commentator.outputs.output1 > 0 }}
     runs-on: ubuntu-latest
     steps:
 
-      - name: github.event.issue.pull_request != ''
-        run: echo "${{ github.event.issue.pull_request != '' }}"
-      - name: contains(github.event.comment.body, '/alpha')
-        run: echo "${{ contains(github.event.comment.body, '/alpha') }}"
-      - name: check commenator
-        run: echo "${{ needs.check-commentator.outputs.output1 > 0 }}"
-      - name: what was output
-        run: echo "${{ needs.check-commentator.outputs.output1 }}"
+      - name: Get commentator
+        run: echo "it is a member!"
 
 #  build-alpha:
 #    name: Build alpha package
