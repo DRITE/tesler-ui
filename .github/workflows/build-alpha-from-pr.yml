@@ -39,7 +39,7 @@ jobs:
       - name: check output
         run: echo "${{ needs.check-commentator.outputs.member_check > 0 }}"
       - name: what was output
-        run: echo "${{ jobs.check-commentator.outputs.member_check }}"
+        run: echo "${{ needs.check-commentator.outputs.member_check }}"
 
 #  build-alpha:
 #    name: Build alpha package
