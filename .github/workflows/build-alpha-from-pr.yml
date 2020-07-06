@@ -49,7 +49,7 @@ jobs:
     needs: check-commentator
     env:
       TOKEN: ${{ secrets.READ_MEMBERS_TOKEN }}
-    if: github.event.issue.pull_request != '' && contains(github.event.comment.body, '/alpha') && ${{ curl -u drite:$TOKEN https://api.github.com/orgs/tesler-platform/teams/tesler-team/members | grep -Eo "${{ github.event.comment.user.login }}" | wc -l > 0 }}
+#    if: github.event.issue.pull_request != '' && contains(github.event.comment.body, '/alpha')
     runs-on: ubuntu-latest
     steps:
 
