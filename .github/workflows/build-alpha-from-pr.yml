@@ -30,7 +30,7 @@ jobs:
     needs: check-commentator
     env:
       TOKEN: ${{ secrets.READ_MEMBERS_TOKEN }}
-    if: github.event.issue.pull_request != '' && contains(github.event.comment.body, '/alpha') && (${{ needs.check-commentator.outputs.member_check }} == 1)
+    if: ${{ github.event.issue.pull_request != '' && contains(github.event.comment.body, '/alpha') && (needs.check-commentator.outputs.member_check == 1) }}
     runs-on: ubuntu-latest
 
     steps:
