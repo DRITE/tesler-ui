@@ -39,10 +39,10 @@ jobs:
         run: echo "${{ github.event.issue.pull_request != '' }}"
       - name: contains(github.event.comment.body, '/alpha')
         run: echo "${{ contains(github.event.comment.body, '/alpha') }}"
-      - name: needs.check-commentator.outputs.member_check == 1
-        run: echo "${{ needs.check-commentator.outputs.member_check == 1 }}"
-      - name: needs.check-commentator.outputs.member_check
-        run: echo "${{ needs.check-commentator.outputs.member_check }}"
+      - name: jobs.check-commentator.outputs.member_check == 1
+        run: echo "${{ jobs.check-commentator.outputs.member_check == 1 }}"
+      - name: jobs.check-commentator.outputs.member_check
+        run: echo "${{ jobs.check-commentator.outputs.member_check }}"
 
 #  build-alpha:
 #    name: Build alpha package
