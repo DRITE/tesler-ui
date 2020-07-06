@@ -23,10 +23,10 @@ jobs:
           if [ "$result" -gt "0" ];
           then
           echo "setting.. 1";
-          echo "::set-output name=member_check::1";
+          echo "::set-output name=member_check::member";
           else
           echo "setting.. 0";
-          echo "::set-output name=member_check::0";
+          echo "::set-output name=member_check::notmember";
           fi;
 
   build-alpha:
