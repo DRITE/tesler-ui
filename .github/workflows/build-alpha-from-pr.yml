@@ -20,10 +20,7 @@ jobs:
         run: |
           result=`curl -u drite:$TOKEN https://api.github.com/orgs/tesler-platform/teams/tesler-team/members | grep -Eo "${{ github.event.comment.user.login }}" | wc -l`;
           echo "number of entries: $result";
-          if [ "$result" -gt "0" ];
-          then echo "::set-output name=member_check::1";
-          else echo "::set-output name=member_check::0";
-          fi;
+          echo "::set-output name=member_check::$result";
 
   build-alpha:
     name: Build alpha package
@@ -40,7 +37,7 @@ jobs:
       - name: contains(github.event.comment.body, '/alpha')
         run: echo "${{ contains(github.event.comment.body, '/alpha') }}"
       - name: check output
-        run: echo "${{ jobs.check-commentator.outputs.member_check == 1 }}"
+        run: echo "${{ needs.check-commentator.outputs.member_check > 0 }}"
       - name: what was output
         run: echo "${{ jobs.check-commentator.outputs.member_check }}"
 
