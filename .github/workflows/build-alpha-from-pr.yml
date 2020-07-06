@@ -20,7 +20,14 @@ jobs:
         run: |
           result=`curl -u drite:$TOKEN https://api.github.com/orgs/tesler-platform/teams/tesler-team/members | grep -Eo "${{ github.event.comment.user.login }}" | wc -l`;
           echo "number of entries: $result";
-          echo "::set-output name=member_check::$result";
+          if [ "$result" -gt "0" ];
+          then
+          echo "setting.. 1";
+          echo "::set-output name=member_check::1";
+          else
+          echo "setting.. 0";
+          echo "::set-output name=member_check::0";
+          fi;
 
   build-alpha:
     name: Build alpha package
