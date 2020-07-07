@@ -17,6 +17,9 @@ jobs:
     outputs:
       output1: ${{ steps.step1.outputs.member_check }}
     steps:
+      - name: test curl
+        run: |
+          curl --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' --url https://api.github.com/orgs/tesler-platform/teams/tesler-team/members
       - name: Grep commentator
         id: step1
         run: |
