@@ -464,6 +464,7 @@ export const TableWidget: FunctionComponent<TableWidgetProps> = (props) => {
         [filtersExist]
     )
 
+
     return <div
         className={styles.tableContainer}
         ref={tableContainerRef}
