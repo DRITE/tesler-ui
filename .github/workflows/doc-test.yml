@@ -8,7 +8,7 @@ jobs:
   send-message:
     name: Send message
     env:
-      TOKEN: ${{ secrets.READ_MEMBERS_TOKEN }}
+      TOKEN: ${{ secrets.EVENT_DISPATCH_TOKEN }}
     if: github.event.issue.pull_request != '' && contains(github.event.comment.body, '/testDoc')
     runs-on: ubuntu-latest
     steps:
