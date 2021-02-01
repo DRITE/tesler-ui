@@ -1,0 +1,22 @@
+name: Run doc tests
+
+on:
+  issue_comment:
+    types: [ created ]
+
+jobs:
+  send-message:
+    name: Send message
+    env:
+      TOKEN: ${{ secrets.READ_MEMBERS_TOKEN }}
+    if: github.event.issue.pull_request != '' && contains(github.event.comment.body, '/testDoc')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send
+        id: send
+        run: |
+          curl \
+          -X POST \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/DRITE/tesler-doc/dispatches \
+          -d '{"event_type":"test_doc"}'
