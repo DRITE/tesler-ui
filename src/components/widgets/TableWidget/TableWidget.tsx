@@ -85,6 +85,7 @@ export interface TableWidgetProps extends TableWidgetOwnProps {
  * @category Widgets
  */
 export const TableWidget: FunctionComponent<TableWidgetProps> = props => {
+    console.log('test')
     const {
         meta,
         rowSelection,
