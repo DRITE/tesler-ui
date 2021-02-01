@@ -15,6 +15,6 @@ jobs:
       - name: Repository Dispatch
         uses: peter-evans/repository-dispatch@v1
         with:
-          token: ${{ secrets.EVENT_DISPATCH_TOKEN }}
+          token: ${{ env.doc.EVENT_DISPATCH_TOKEN }}
           repository: DRITE/tesler-doc
           event-type: test_doc
