@@ -26,9 +26,10 @@ jobs:
           echo "branch_name=${{ fromJson(steps.get_pr.outputs.pr_data).head.ref }}"
           echo "repository name = ${{ steps.get_pr.outputs.repository }}"
           echo "##[set-output name=branch_name;]${{ fromJson(steps.get_pr.outputs.pr_data).head.ref }}"
-#      - name: Repository Dispatch
-#        uses: peter-evans/repository-dispatch@v1
-#        with:
-#          token: ${{ secrets.EVENT_DISPATCH_TOKEN }}
-#          repository: DRITE/tesler-doc
-#          event-type: test_doc
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.EVENT_DISPATCH_TOKEN }}
+          repository: DRITE/tesler-doc
+          event-type: test_doc
+          client-payload: '{"front": {"repository": "${{ steps.get_pr.outputs.repository }}", "branch": "${{ steps.get_branch.outputs.branch_name }}"}}'
