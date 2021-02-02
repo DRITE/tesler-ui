@@ -24,7 +24,7 @@ jobs:
         id: get_branch
         run: |
           echo "branch_name=${{ fromJson(steps.get_pr.outputs.pr_data).head.ref }}"
-          echo "repository name = ${{ fromJson(steps.get_pr.outputs.repository) }}"
+          echo "repository name = ${{ steps.get_pr.outputs.repository }}"
           echo "##[set-output name=branch_name;]${{ fromJson(steps.get_pr.outputs.pr_data).head.ref }}"
 #      - name: Repository Dispatch
 #        uses: peter-evans/repository-dispatch@v1
