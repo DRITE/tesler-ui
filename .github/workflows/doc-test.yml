@@ -13,9 +13,17 @@ jobs:
     if: github.event.issue.pull_request != '' && contains(github.event.comment.body, '/testDoc')
     runs-on: ubuntu-latest
     steps:
-      - name: Get info
+      - name: Get PR
+        id: get_pr
         run: |
-          echo '${{ toJSON(github) }}'
+          echo "github.event.issue.pull_request.url=${{ github.event.issue.pull_request.url }}"
+          pr=`curl -u drite:$token ${{ github.event.issue.pull_request.url }} | tr '\n' ' '`
+          echo "##[set-output name=pr_data;]$pr"
+      - name: Get branch
+        id: get_branch
+        run: |
+          echo "branch_name=${{ fromJson(steps.get_pr.outputs.pr_data).head.ref }}"
+          echo "##[set-output name=branch_name;]${{ fromJson(steps.get_pr.outputs.pr_data).head.ref }}"
 #      - name: Repository Dispatch
 #        uses: peter-evans/repository-dispatch@v1
 #        with:
