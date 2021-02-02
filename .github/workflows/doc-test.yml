@@ -15,8 +15,8 @@ jobs:
     steps:
       - name: Get info
         run: |
-          echo '${{ GITHUB_REF }}'
-          echo '${{ GITHUB_SHA }}'
+          echo '${{ github.GITHUB_REF }}'
+          echo '${{ github.GITHUB_SHA }}'
 #      - name: Repository Dispatch
 #        uses: peter-evans/repository-dispatch@v1
 #        with:
