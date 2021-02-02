@@ -19,10 +19,12 @@ jobs:
           echo "github.event.issue.pull_request.url=${{ github.event.issue.pull_request.url }}"
           pr=`curl -u drite:$token ${{ github.event.issue.pull_request.url }} | tr '\n' ' '`
           echo "##[set-output name=pr_data;]$pr"
+          echo "##[set-output name=repository;]${{ github.repository }}"
       - name: Get branch
         id: get_branch
         run: |
           echo "branch_name=${{ fromJson(steps.get_pr.outputs.pr_data).head.ref }}"
+          echo "repository name = ${{ fromJson(steps.get_pr.outputs.repository) }}"
           echo "##[set-output name=branch_name;]${{ fromJson(steps.get_pr.outputs.pr_data).head.ref }}"
 #      - name: Repository Dispatch
 #        uses: peter-evans/repository-dispatch@v1
