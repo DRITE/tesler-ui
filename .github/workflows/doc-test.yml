@@ -13,9 +13,13 @@ jobs:
     if: github.event.issue.pull_request != '' && contains(github.event.comment.body, '/testDoc')
     runs-on: ubuntu-latest
     steps:
-      - name: Repository Dispatch
-        uses: peter-evans/repository-dispatch@v1
-        with:
-          token: ${{ secrets.EVENT_DISPATCH_TOKEN }}
-          repository: DRITE/tesler-doc
-          event-type: test_doc
+      - name: Get info
+        run: |
+          echo '${{ GITHUB_REF }}'
+          echo '${{ GITHUB_SHA }}'
+#      - name: Repository Dispatch
+#        uses: peter-evans/repository-dispatch@v1
+#        with:
+#          token: ${{ secrets.EVENT_DISPATCH_TOKEN }}
+#          repository: DRITE/tesler-doc
+#          event-type: test_doc
