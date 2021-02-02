@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: Get info
         run: |
-          echo '${{ github }}'
+          echo '${{ toJSON(github) }}'
 #      - name: Repository Dispatch
 #        uses: peter-evans/repository-dispatch@v1
 #        with:
