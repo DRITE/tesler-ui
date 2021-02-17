@@ -174,7 +174,7 @@ module.exports = (env, options) => {
             new CopyWebpackPlugin([
                 { from: 'package.json' },
                 { from: 'README.md' },
-                { from: 'LICENSE' },
+                // { from: 'LICENSE' },
                 { from: 'CHANGELOG.md' },
                 { from: 'CONTRIBUTING.md' }
             ])
