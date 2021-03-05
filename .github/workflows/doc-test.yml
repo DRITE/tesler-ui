@@ -39,7 +39,7 @@ jobs:
         uses: peter-evans/repository-dispatch@v1
         with:
           token: ${{ secrets.EVENT_DISPATCH_TOKEN }}
-          repository: DRITE/tesler-doc
+          repository: ${{ secrets.TARGET_REPOSITORY }}
           event-type: test_doc
           client-payload: '{"back": {"repository": "${{ steps.parse_back_info.outputs.back_repos }}", "branch": "${{ steps.parse_back_info.outputs.back_sha }}"}, "front": {"repository": "${{ steps.get_pr.outputs.repository }}", "branch": "${{ steps.get_branch.outputs.branch_name }}"}}'
       - name: Repository Dispatch
@@ -47,6 +47,6 @@ jobs:
         uses: peter-evans/repository-dispatch@v1
         with:
           token: ${{ secrets.EVENT_DISPATCH_TOKEN }}
-          repository: DRITE/tesler-doc
+          repository: ${{ secrets.TARGET_REPOSITORY }}
           event-type: test_doc
           client-payload: '{"front": {"repository": "${{ steps.get_pr.outputs.repository }}", "branch": "${{ steps.get_branch.outputs.branch_name }}"}}'
