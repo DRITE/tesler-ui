@@ -10,6 +10,7 @@ jobs:
     environment: doc
     env:
       token: ${{ secrets.EVENT_DISPATCH_TOKEN }}
+      user: ${{ secrets.EVENT_DISPATCH_USER }}
     if: github.event.issue.pull_request != '' && (contains(github.event.comment.body, '/testDoc') || contains(github.event.comment.body, '/withBackTestDoc'))
     runs-on: ubuntu-latest
     steps:
@@ -17,7 +18,7 @@ jobs:
         id: get_pr
         run: |
           echo "github.event.issue.pull_request.url=${{ github.event.issue.pull_request.url }}"
-          pr=`curl -u drite:$token ${{ github.event.issue.pull_request.url }} | tr '\n' ' '`
+          pr=`curl -u $user:$token ${{ github.event.issue.pull_request.url }} | tr '\n' ' '`
           echo "##[set-output name=pr_data;]$pr"
           echo "##[set-output name=repository;]${{ github.repository }}"
       - name: Get branch
