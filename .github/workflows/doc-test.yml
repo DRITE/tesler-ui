@@ -24,6 +24,7 @@ jobs:
   send-message:
     name: Send message
     environment: doc
+    needs: check-commentator
     env:
       token: ${{ secrets.EVENT_DISPATCH_TOKEN }}
       user: ${{ secrets.EVENT_DISPATCH_USER }}
